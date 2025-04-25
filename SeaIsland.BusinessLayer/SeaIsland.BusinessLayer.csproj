@@ -12,4 +12,8 @@
     <Folder Include="ValidationRules\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SeaIsland.DataAccessLayer\SeaIsland.DataAccessLayer.csproj" />
+  </ItemGroup>
+
 </Project>
