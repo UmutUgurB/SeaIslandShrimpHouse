@@ -4,7 +4,7 @@ using SeaIsland.EntityLayer.Entities;
 
 namespace SeaIsland.BusinessLayer.Concrete
 {
-    public class AbaoutManger(IAboutDal _aboutDal) : IAboutService
+    public class AboutManager(IAboutDal _aboutDal) : IAboutService
     {
         public void TAdd(About item)
         {

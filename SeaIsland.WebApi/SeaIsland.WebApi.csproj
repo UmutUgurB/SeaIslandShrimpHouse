@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SeaIsland.BusinessLayer\SeaIsland.BusinessLayer.csproj" />
     <ProjectReference Include="..\SeaIsland.DtoLayer\SeaIsland.DtoLayer.csproj" />
   </ItemGroup>

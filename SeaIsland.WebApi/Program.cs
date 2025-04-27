@@ -1,9 +1,28 @@
 using Microsoft.EntityFrameworkCore;
+using SeaIsland.BusinessLayer.Abstract;
+using SeaIsland.BusinessLayer.Concrete;
+using SeaIsland.DataAccessLayer.Abstract;
 using SeaIsland.DataAccessLayer.Concrete;
+using SeaIsland.DataAccessLayer.EntityFramework;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddDbContext<AppDbContext>();
+
+builder.Services.AddScoped<IAboutService, AboutManager>();
+builder.Services.AddScoped<IAboutDal,EfAboutDal>();
+
+builder.Services.AddScoped<IBookingService, BookingManager>();
+builder.Services.AddScoped<IBookingDal,EfBookingDal>(); 
+
+builder.Services.AddScoped<ICategoryService, CategoryManager>();    
+builder.Services.AddScoped<ICategoryDal,EfCategoryDal>();   
+
+builder.Services.AddAutoMapper(typeof(Program));
+
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
