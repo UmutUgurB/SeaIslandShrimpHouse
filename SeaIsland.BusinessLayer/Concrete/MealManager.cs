@@ -26,6 +26,11 @@ namespace SeaIsland.BusinessLayer.Concrete
             return _mealDal.GetlistAll();   
         }
 
+        public List<Meal> TGetMealsWithCategory()
+        {
+            return _mealDal.GetMealsWithCategory();
+        }
+
         public void TUpdate(Meal item)
         {
             _mealDal.Update(item);  

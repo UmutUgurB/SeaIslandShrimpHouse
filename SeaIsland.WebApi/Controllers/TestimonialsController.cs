@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SeaIsland.BusinessLayer.Abstract;
-using SeaIsland.DtoLayer.SocialMediaDto;
 using SeaIsland.DtoLayer.TestimonialDto;
 using SeaIsland.EntityLayer.Entities;
 

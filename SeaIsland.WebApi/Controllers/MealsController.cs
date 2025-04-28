@@ -44,5 +44,11 @@ namespace SeaIsland.WebApi.Controllers
             mealService.TAdd(newValue);
             return Ok("Ürün Başarıyla Eklendi!");
         }
+        [HttpGet("{id}")]
+        public IActionResult ProductListWithCategory(int id)
+        {
+            var value = _mapper.Map<List<ResultMealWithCategory>>(mealService.TGetMealsWithCategory());
+            return Ok(value);   
+        }
     }
 }

@@ -205,6 +205,9 @@ namespace SeaIsland.DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MealID"));
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -224,6 +227,8 @@ namespace SeaIsland.DataAccessLayer.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("MealID");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Meals");
                 });
@@ -286,6 +291,22 @@ namespace SeaIsland.DataAccessLayer.Migrations
                     b.HasKey("TestimonialID");
 
                     b.ToTable("Testimonials");
+                });
+
+            modelBuilder.Entity("SeaIsland.EntityLayer.Entities.Meal", b =>
+                {
+                    b.HasOne("SeaIsland.EntityLayer.Entities.Category", "Category")
+                        .WithMany("Meal")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("SeaIsland.EntityLayer.Entities.Category", b =>
+                {
+                    b.Navigation("Meal");
                 });
 #pragma warning restore 612, 618
         }

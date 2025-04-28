@@ -5,7 +5,7 @@ namespace SeaIsland.DataAccessLayer.Concrete
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions options) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
         public DbSet<About> Abouts { get; set; }

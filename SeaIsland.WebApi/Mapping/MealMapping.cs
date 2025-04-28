@@ -12,6 +12,7 @@ namespace SeaIsland.WebApi.Mapping
             CreateMap<Meal,ResultMealDto>().ReverseMap();
             CreateMap<Meal,CreateMealDto>().ReverseMap();
             CreateMap<Meal,UpdateMealDto>().ReverseMap();
+            CreateMap<Meal,ResultMealWithCategory>().ReverseMap();  
         }
     }
 }

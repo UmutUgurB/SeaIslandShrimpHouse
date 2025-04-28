@@ -12,6 +12,7 @@ namespace SeaIsland.EntityLayer.Entities
         public string CategoryName { get; set; }
         public string CategoryDescription { get; set; } 
         public bool IsCategoryActive { get; set; }
+        public List<Meal> Meal { get; set; }
 
     }
 }
