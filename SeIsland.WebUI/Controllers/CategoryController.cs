@@ -46,7 +46,7 @@ namespace SeIsland.WebUI.Controllers
 			{
 				return RedirectToAction("Index");
 			}
-            return Content("Kategori Silinemedi"); 
+			return Content($"Kategori Silinemedi - StatusCode: {responseMessage.StatusCode}");
 		}
 	}
 }

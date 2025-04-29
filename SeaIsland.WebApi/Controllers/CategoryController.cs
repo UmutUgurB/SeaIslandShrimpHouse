@@ -39,12 +39,31 @@ namespace SeaIsland.WebApi.Controllers
             return Ok("Kategori Başarıyla Güncellendi");
 
         }
-        [HttpDelete("{id}")]
-        public IActionResult DeleteCategory(int id)
-        {
-            var value = categoryService.TGetById(id);
-            categoryService.TDelete(value);
-            return Ok("Kategori Başarıyla Silindi");
-        }
-    }
+		[HttpDelete("{id}")]
+		public IActionResult DeleteCategory(int id)
+		{
+			try
+			{
+				Console.WriteLine($"[DEBUG] API: Silme isteği geldi. ID = {id}");
+
+				var value = categoryService.TGetById(id);
+
+				if (value == null)
+				{
+					Console.WriteLine("[DEBUG] API: Kategori bulunamadı.");
+					return NotFound("Silinecek kategori bulunamadı.");
+				}
+
+				categoryService.TDelete(value);
+
+				Console.WriteLine("[DEBUG] API: Kategori başarıyla silindi.");
+				return Ok("Kategori başarıyla silindi.");
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"[ERROR] API: Hata oluştu: {ex.Message}");
+				return StatusCode(500, "Kategori silinirken bir hata oluştu.");
+			}
+		}
+	}
 }
