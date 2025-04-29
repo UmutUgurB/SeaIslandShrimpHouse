@@ -39,7 +39,7 @@ namespace SeaIsland.WebApi.Controllers
             return Ok("Kategori Başarıyla Güncellendi");
 
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteCategory(int id)
         {
             var value = categoryService.TGetById(id);
