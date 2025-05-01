@@ -55,7 +55,7 @@ namespace SeIsland.WebUI.Controllers
 			var client = _httpClientFactory.CreateClient();
 			var jsonData = JsonConvert.SerializeObject(createMealDto);
 			StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-			var responseMessage = await client.PostAsync("http://localhost:5221/api/Meal", stringContent);
+			var responseMessage = await client.PostAsync("http://localhost:5221/api/Meals", stringContent);
 
 			if (responseMessage.IsSuccessStatusCode)
 			{
@@ -63,7 +63,7 @@ namespace SeIsland.WebUI.Controllers
 			}
 
 			// ❗ Eğer başarısızsa DropDown tekrar doldurulmalı:
-			var categoryResponse = await client.GetAsync("http://localhost:5221/api/Category");
+			var categoryResponse = await client.GetAsync("http://localhost:5221/api/Meals");
 			if (categoryResponse.IsSuccessStatusCode)
 			{
 				var categoryJson = await categoryResponse.Content.ReadAsStringAsync();
@@ -86,7 +86,7 @@ namespace SeIsland.WebUI.Controllers
 		public async Task<IActionResult> UpdateMeal(int id)
 		{
 			var client = _httpClientFactory.CreateClient();
-			var responseMessage = await client.GetAsync($"http://localhost:5221/api/Meal/{id}");
+			var responseMessage = await client.GetAsync($"http://localhost:5221/api/Meals/{id}");
 			if(responseMessage.IsSuccessStatusCode)
 			{
 				var jsonData = await responseMessage.Content.ReadAsStringAsync();
