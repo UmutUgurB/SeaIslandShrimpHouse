@@ -18,20 +18,22 @@ namespace SeaIsland.WebApi.Controllers
             var values = categoryService.TGetlistAll(); 
             return Ok(values);  
         }
-        [HttpGet("GetById")]
-        public IActionResult GetById(int id)
-        {
-            var value = categoryService.TGetById(id);   
-            return Ok(value);   
-        }
-        [HttpPost]
+		[HttpGet("{id}")]
+		public IActionResult GetCategory(int id)
+		{
+			var value = categoryService.TGetById(id);
+			if (value == null)
+				return NotFound();
+			return Ok(value);
+		}
+		[HttpPost]
         public IActionResult CreateCategory(CreateCategoryDto createCategoryDto)
         {
             var newValue = _mapper.Map<Category>(createCategoryDto);
             categoryService.TAdd(newValue);
             return Ok("Kategori Başarıyla Eklendi");
         }
-        [HttpPut]
+        [HttpPut("{id}")]
         public IActionResult Edit(UpdateCategoryDto updateCategoryDto)
         {
             var newValue = _mapper.Map<Category>(updateCategoryDto);
