@@ -37,13 +37,21 @@ namespace SeaIsland.WebApi.Controllers
             mealService.TUpdate(newValue);
             return Ok("Ürün Başarıyla Güncellendi");
         }
-        [HttpPost]
-        public IActionResult CreateMeal(CreateMealDto createMealDto)
-        {
-            var newValue = _mapper.Map<Meal> (createMealDto);   
-            mealService.TAdd(newValue);
-            return Ok("Ürün Başarıyla Eklendi!");
-        }
+		[HttpPost]
+		public IActionResult CreateMeal(CreateMealDto createMealDto)
+		{
+			mealService.TAdd(new Meal()
+			{
+				MealDescription = createMealDto.MealDescription,
+				ImageUrl = createMealDto.ImageUrl,
+				Price = createMealDto.Price,
+				MealName = createMealDto.MealName,
+				IsMealActive = createMealDto.IsMealActive,
+				CategoryId = createMealDto.CategoryId
+			});
+
+			return Ok("Ürün Başarıyla Eklendi");
+		}
 		[HttpGet("ProductListWithCategory")]
 		public IActionResult ProductListWithCategory()
 		{
@@ -56,6 +64,7 @@ namespace SeaIsland.WebApi.Controllers
 				ImageUrl = meal.ImageUrl,
 				Price = meal.Price,
 				IsMealActive = meal.IsMealActive,
+                CategoryId = meal.CategoryId,
 				CategoryName = meal.Category?.CategoryName ?? "Kategori Yok"
 			}).ToList();
 
