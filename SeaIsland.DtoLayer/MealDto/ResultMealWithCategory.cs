@@ -1,4 +1,6 @@
-﻿namespace SeaIsland.DtoLayer.MealDto
+﻿using SeaIsland.EntityLayer.Entities;
+
+namespace SeaIsland.DtoLayer.MealDto
 {
     public class ResultMealWithCategory
     {
@@ -10,5 +12,6 @@
         public bool IsMealActive { get; set; }
         public string CategoryName {  get; set; }
 		public int CategoryId { get; set; }
+
 	}
 }

@@ -1,0 +1,61 @@
+﻿@using SeIsland.WebUI.Dtos.MealDtos
+@model List<ResultMealWithCategory>
+@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+	.meal_table {
+		padding: 2rem 0;
+		display: flex;
+		justify-content: center;
+		margin-top: 100px; /* Menüden aşağı başlasın */
+	}
+
+	.meal_table-inner {
+		width: 100%;
+		max-width: 900px;
+	}
+
+	.meal_table-image td,
+	.meal_table-image th {
+		vertical-align: middle;
+		text-align: center;
+	}
+
+	.meal_table-image img {
+		width: 100px;
+		height: auto;
+		border-radius: 8px;
+	}
+</style>
+
+<div class="meal_table">
+	<div class="meal_table-inner">
+		<table class="table table-bordered table-hover meal_table-image">
+			<thead class="table-dark">
+				<tr>
+					<th scope="col">ID</th>
+					<th scope="col">Image</th>
+					<th scope="col">Category</th>
+					<th scope="col">Meal Name</th>
+					<th scope="col">Price (₺)</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model)
+				{
+					<tr>
+						<td>@item.MealID</td>
+						<td>
+							<img src="@item.ImageUrl" alt="Meal Image" />
+						</td>
+						<td>@item.CategoryName</td>
+						<td>@item.MealName</td>
+						<td>@item.Price ₺</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>

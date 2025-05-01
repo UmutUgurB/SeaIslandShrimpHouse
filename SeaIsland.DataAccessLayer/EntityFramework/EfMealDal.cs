@@ -15,10 +15,14 @@ namespace SeaIsland.DataAccessLayer.EntityFramework
             _context = context;
         }
 
-        public List<Meal> GetMealsWithCategory()
-        {
-            var values = _context.Meals.Include(x => x.Category).ToList();
-            return values;
-        }
-    }
+		public List<Meal> GetMealsWithCategory()
+		{
+			var values = _context.Meals
+				.Include(x => x.Category)
+				.AsNoTracking()
+				.ToList();
+
+			return values;
+		}
+	}
 }

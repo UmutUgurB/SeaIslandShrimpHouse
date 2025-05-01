@@ -11,11 +11,11 @@ namespace SeIsland.WebUI.Controllers
 		public async Task<IActionResult> Index()
 		{
 			var client = _httpClientFactory.CreateClient();
-			var responseMessage = await client.GetAsync("http://localhost:5221/api/Meal");
+			var responseMessage = await client.GetAsync("http://localhost:5221/api/Meals/ProductListWithCategory");
 			if (responseMessage.IsSuccessStatusCode) 
 			{
 				var jsonData = await responseMessage.Content.ReadAsStringAsync();
-				var values = JsonConvert.DeserializeObject<List<ResultMealDto>>(jsonData);
+				var values = JsonConvert.DeserializeObject<List<ResultMealWithCategory>>(jsonData);
 				return View(values);
 			}
 			return View();
