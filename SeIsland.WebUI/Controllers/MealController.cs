@@ -85,71 +85,66 @@ namespace SeIsland.WebUI.Controllers
 		[HttpGet]
 		public async Task<IActionResult> UpdateMeal(int id)
 		{
-			var client1 = _httpClientFactory.CreateClient();
-			var responseMessage1 = await client1.GetAsync("http://localhost:5221/api/Category");
+			var client = _httpClientFactory.CreateClient();
 
-			if (!responseMessage1.IsSuccessStatusCode)
+			// Kategori Listesi Al
+			var responseCategory = await client.GetAsync("http://localhost:5221/api/Category");
+			if (!responseCategory.IsSuccessStatusCode)
 			{
 				ViewBag.CategoryList = new List<SelectListItem>();
 				return View();
 			}
-
-			var jsonData1 = await responseMessage1.Content.ReadAsStringAsync();
-			var values1 = JsonConvert.DeserializeObject<List<ResultCategoryDto>>(jsonData1);
-
-			List<SelectListItem> values2 = values1.Select(x => new SelectListItem
+			var categoryJson = await responseCategory.Content.ReadAsStringAsync();
+			var categoryList = JsonConvert.DeserializeObject<List<ResultCategoryDto>>(categoryJson);
+			ViewBag.CategoryList = categoryList.Select(x => new SelectListItem
 			{
 				Text = x.CategoryName,
 				Value = x.CategoryId.ToString()
 			}).ToList();
 
-			ViewBag.CategoryList = values2;
-
-			var client = _httpClientFactory.CreateClient();
-			var responseMessage = await client.GetAsync($"http://localhost:5221/api/Meals/{id}");
-			if (responseMessage.IsSuccessStatusCode)
+			// Güncellenecek Ürün Verisi
+			var responseMeal = await client.GetAsync($"http://localhost:5221/api/Meals/{id}");
+			if (responseMeal.IsSuccessStatusCode)
 			{
-				var jsonData = await responseMessage.Content.ReadAsStringAsync();
-				var values = JsonConvert.DeserializeObject<UpdateMealDto>(jsonData); // ✔️ düzeltme burada
-				return View(values);
+				var mealJson = await responseMeal.Content.ReadAsStringAsync();
+				var updateDto = JsonConvert.DeserializeObject<UpdateMealDto>(mealJson);
+				return View(updateDto);
 			}
+
 			return View();
 		}
 
 		[HttpPost]
 		public async Task<IActionResult> UpdateMeal(UpdateMealDto updateMealDto)
 		{
-			var client1 = _httpClientFactory.CreateClient();
-			var responseMessage1 = await client1.GetAsync("http://localhost:5221/api/Category");
+			var client = _httpClientFactory.CreateClient();
 
-			if (!responseMessage1.IsSuccessStatusCode)
+			// Kategorileri tekrar doldur (başarısız olursa form bozulmasın)
+			var responseCategory = await client.GetAsync("http://localhost:5221/api/Category");
+			var categoryList = new List<ResultCategoryDto>();
+			if (responseCategory.IsSuccessStatusCode)
 			{
-				// Hatalı durum — boş liste gönder veya hata mesajı döndür
-				ViewBag.CategoryList = new List<SelectListItem>();
-				return View();
+				var categoryJson = await responseCategory.Content.ReadAsStringAsync();
+				categoryList = JsonConvert.DeserializeObject<List<ResultCategoryDto>>(categoryJson);
 			}
-
-			var jsonData1 = await responseMessage1.Content.ReadAsStringAsync();
-			var values = JsonConvert.DeserializeObject<List<ResultCategoryDto>>(jsonData1);
-
-			List<SelectListItem> values2 = values.Select(x => new SelectListItem
+			ViewBag.CategoryList = categoryList.Select(x => new SelectListItem
 			{
 				Text = x.CategoryName,
 				Value = x.CategoryId.ToString()
 			}).ToList();
 
-			ViewBag.CategoryList = values2;
+			// API'ye Güncelleme Talebi Gönder
+			var jsonData = JsonConvert.SerializeObject(updateMealDto);
+			var stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+			var response = await client.PutAsync($"http://localhost:5221/api/Meals/{updateMealDto.MealID}", stringContent);
 
-
-			var client = _httpClientFactory.CreateClient();
-			var jsonData = JsonConvert.SerializeObject(updateMealDto);	
-			StringContent stringContent = new StringContent(jsonData,Encoding.UTF8,"application/json");
-			var responseMessage = await client.PutAsync($"http://localhost:5221/api/Meals/Edit/{updateMealDto.MealID}",stringContent);
-			if(responseMessage.IsSuccessStatusCode)
+			if (response.IsSuccessStatusCode)
 			{
 				return RedirectToAction("Index");
 			}
-			return View();
+
+			// Hata varsa formu tekrar göster
+			return View(updateMealDto);
 		}
 	}
 }

@@ -43,25 +43,25 @@ namespace SeaIsland.WebApi.Controllers
             mealService.TDelete(value);
             return Ok("Ürün Başarıyla Silindi!");
         }
-        [HttpPut("{id}")]
-        public IActionResult Edit(UpdateMealDto updateMealDto)
-        {
+		[HttpPut("{id}")]
+		public IActionResult Edit(int id, [FromBody] UpdateMealDto updateMealDto)
+		{
+			// ID eşitlemesi (güvenlik için)
+			updateMealDto.MealID = id;
+
 			mealService.TUpdate(new Meal()
 			{
+				MealID = updateMealDto.MealID,
+				MealName = updateMealDto.MealName,
 				MealDescription = updateMealDto.MealDescription,
 				ImageUrl = updateMealDto.ImageUrl,
 				Price = updateMealDto.Price,
-				MealName = updateMealDto.MealName,
 				IsMealActive = updateMealDto.IsMealActive,
-				CategoryId = updateMealDto.CategoryId,
-				MealID = updateMealDto.MealID,	
-				
-
-
-
+				CategoryId = updateMealDto.CategoryId
 			});
-            return Ok("Ürün Başarıyla Güncellendi");
-        }
+
+			return Ok("Ürün Başarıyla Güncellendi");
+		}
 		[HttpPost]
 		public IActionResult CreateMeal(CreateMealDto createMealDto)
 		{
