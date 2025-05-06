@@ -8,5 +8,6 @@
 		public string ImageUrl { get; set; }
 		public decimal Price { get; set; }
 		public bool IsMealActive { get; set; }
+		public int CategoryId { get; set; }
 	}
 }

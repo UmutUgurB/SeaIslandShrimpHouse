@@ -17,24 +17,49 @@ namespace SeaIsland.WebApi.Controllers
             var value = mealService.TGetlistAll();  
             return Ok(value);
         }
-        [HttpGet("GetById")]
-        public IActionResult GetById(int id)
-        {
-            var value = mealService.TGetById(id);
-            return Ok(value);
-        }
-        [HttpDelete]
+		[HttpGet("{id}")]
+		public IActionResult GetById(int id)
+		{
+			var meal = mealService.TGetById(id);
+
+			// ⛔ Entity'yi doğrudan döndürme, DTO'ya map et
+			var dto = new UpdateMealDto
+			{
+				MealID = meal.MealID,
+				MealName = meal.MealName,
+				MealDescription = meal.MealDescription,
+				ImageUrl = meal.ImageUrl,
+				Price = meal.Price,
+				IsMealActive = meal.IsMealActive,
+				CategoryId = meal.CategoryId
+			};
+
+			return Ok(dto);
+		}
+		[HttpDelete]
         public IActionResult DeleteById(int id)
         {
             var value = mealService.TGetById(id);
             mealService.TDelete(value);
             return Ok("Ürün Başarıyla Silindi!");
         }
-        [HttpPut]
+        [HttpPut("{id}")]
         public IActionResult Edit(UpdateMealDto updateMealDto)
         {
-            var newValue = _mapper.Map<Meal>(updateMealDto);
-            mealService.TUpdate(newValue);
+			mealService.TUpdate(new Meal()
+			{
+				MealDescription = updateMealDto.MealDescription,
+				ImageUrl = updateMealDto.ImageUrl,
+				Price = updateMealDto.Price,
+				MealName = updateMealDto.MealName,
+				IsMealActive = updateMealDto.IsMealActive,
+				CategoryId = updateMealDto.CategoryId,
+				MealID = updateMealDto.MealID,	
+				
+
+
+
+			});
             return Ok("Ürün Başarıyla Güncellendi");
         }
 		[HttpPost]

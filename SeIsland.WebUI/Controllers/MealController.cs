@@ -85,23 +85,66 @@ namespace SeIsland.WebUI.Controllers
 		[HttpGet]
 		public async Task<IActionResult> UpdateMeal(int id)
 		{
+			var client1 = _httpClientFactory.CreateClient();
+			var responseMessage1 = await client1.GetAsync("http://localhost:5221/api/Category");
+
+			if (!responseMessage1.IsSuccessStatusCode)
+			{
+				ViewBag.CategoryList = new List<SelectListItem>();
+				return View();
+			}
+
+			var jsonData1 = await responseMessage1.Content.ReadAsStringAsync();
+			var values1 = JsonConvert.DeserializeObject<List<ResultCategoryDto>>(jsonData1);
+
+			List<SelectListItem> values2 = values1.Select(x => new SelectListItem
+			{
+				Text = x.CategoryName,
+				Value = x.CategoryId.ToString()
+			}).ToList();
+
+			ViewBag.CategoryList = values2;
+
 			var client = _httpClientFactory.CreateClient();
 			var responseMessage = await client.GetAsync($"http://localhost:5221/api/Meals/{id}");
-			if(responseMessage.IsSuccessStatusCode)
+			if (responseMessage.IsSuccessStatusCode)
 			{
 				var jsonData = await responseMessage.Content.ReadAsStringAsync();
-				var values = JsonConvert.DeserializeObject<UpdateCategoryDto>(jsonData);	
+				var values = JsonConvert.DeserializeObject<UpdateMealDto>(jsonData); // ✔️ düzeltme burada
 				return View(values);
 			}
 			return View();
 		}
+
 		[HttpPost]
 		public async Task<IActionResult> UpdateMeal(UpdateMealDto updateMealDto)
 		{
+			var client1 = _httpClientFactory.CreateClient();
+			var responseMessage1 = await client1.GetAsync("http://localhost:5221/api/Category");
+
+			if (!responseMessage1.IsSuccessStatusCode)
+			{
+				// Hatalı durum — boş liste gönder veya hata mesajı döndür
+				ViewBag.CategoryList = new List<SelectListItem>();
+				return View();
+			}
+
+			var jsonData1 = await responseMessage1.Content.ReadAsStringAsync();
+			var values = JsonConvert.DeserializeObject<List<ResultCategoryDto>>(jsonData1);
+
+			List<SelectListItem> values2 = values.Select(x => new SelectListItem
+			{
+				Text = x.CategoryName,
+				Value = x.CategoryId.ToString()
+			}).ToList();
+
+			ViewBag.CategoryList = values2;
+
+
 			var client = _httpClientFactory.CreateClient();
 			var jsonData = JsonConvert.SerializeObject(updateMealDto);	
 			StringContent stringContent = new StringContent(jsonData,Encoding.UTF8,"application/json");
-			var responseMessage = await client.PutAsync($"http://localhost:5221/api/Meal/{updateMealDto.MealID}",stringContent);
+			var responseMessage = await client.PutAsync($"http://localhost:5221/api/Meals/Edit/{updateMealDto.MealID}",stringContent);
 			if(responseMessage.IsSuccessStatusCode)
 			{
 				return RedirectToAction("Index");
